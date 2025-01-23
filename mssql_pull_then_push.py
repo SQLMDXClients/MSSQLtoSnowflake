@@ -1,9 +1,12 @@
 import os 
+
+# https://pypi.org/project/pymssql/
 import pymssql
 import json
 
 from datetime import date, datetime
 
+# https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-install
 import snowflake.connector
 
 object_types = ["columns", "default_constraints", "foreign_keys", "foreign_key_columns", 

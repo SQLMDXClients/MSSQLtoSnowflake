@@ -7,3 +7,9 @@ python scripts here so you can see the minimal steps necessary.
 
 Security is very important in this process.  Each process has been designed to be
 isolated from the other processes.  You can see each step in detail so you have no questions.
+
+As of this date it is suggested to only use Pyhon 3.11 for these tasks.   Support for newer
+versions is slower than what is generally available.   You can try newer version but you 
+might have issues.
+
+https://docs.snowflake.com/en/developer-guide/python-runtime-support-policy

@@ -1,4 +1,6 @@
 import os 
+
+# https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-install
 import snowflake.connector
 
 object_types = ["columns", "default_constraints", "foreign_keys", "foreign_key_columns", 
