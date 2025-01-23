@@ -13,3 +13,9 @@ versions is slower than what is generally available.   You can try newer version
 might have issues.
 
 https://docs.snowflake.com/en/developer-guide/python-runtime-support-policy
+
+Python Library to connect to MS SQL Server
+https://pypi.org/project/pymssql/
+
+Python Library to connect to Snowflake
+https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-install
