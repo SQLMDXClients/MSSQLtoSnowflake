@@ -23,32 +23,53 @@ def push_to_snowflake_file(object_type:str, file_location:str, target_database, 
 def push_to_snowflake(root_data_path:str, config:dict, target_database:str):
 
     # connect to snowflake instance
-    conn = snowflake.connector.connect(user=config["username"], 
-                                       password=config["password"], 
-                                       account=config["account"], 
-                                       role=config["role"], 
-                                       warehouse=config["warehouse"],
-                                       database=config["appdatabase"],
-                                       schema="_METADATA")
 
-    cursor = conn.cursor()        
+    try:
 
-    for object_type in object_types:
+        conn = snowflake.connector.connect( user=config["username"], 
+                                            password=config["password"], 
+                                            account=config["account"], 
+                                            role=config["role"], 
+                                            warehouse=config["warehouse"],
+                                            database=config["appdatabase"],
+                                            schema="_METADATA" )
 
-        # push the file to snowflake
+        cursor = conn.cursor()        
+        
+        current_database = cursor.execute("SELECT CURRENT_DATABASE()").fetchone()
 
-        push_to_snowflake_file(object_type=object_type, 
-                               file_location=root_data_path, 
-                               target_database=target_database, 
-                               cursor=cursor)
+        if current_database[0] == cursor.connection.database:
 
-    # view definitions doesn't come directly from a mssql view but 
-    # is pulled individually
+            for object_type in object_types:
 
-    push_to_snowflake_file(object_type="view_definitions", 
-                            file_location=root_data_path, 
-                            target_database=target_database, 
-                            cursor=cursor)
+                # push the file to snowflake
+
+                push_to_snowflake_file(object_type=object_type, 
+                                       file_location=root_data_path, 
+                                       target_database=target_database, 
+                                       cursor=cursor)
+
+            # view definitions doesn't come directly from a mssql view but 
+            # is pulled individually
+
+            push_to_snowflake_file(object_type="view_definitions", 
+                                   file_location=root_data_path, 
+                                   target_database=target_database, 
+                                   cursor=cursor)
+
+        else:
+            print("")
+            print(f'Snowflake Database/App {config["appdatabase"]} Not Found or Not Authorized for user {config["username"]}')
+
+    except Exception as e:
+
+        print("")
+        match e.errno:
+
+            case 250003:
+                print(f'Snowflake Account {config["account"]} Not Found')
+
+        print(e)
 
 
 if __name__ == "__main__":
